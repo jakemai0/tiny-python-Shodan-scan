@@ -2,20 +2,24 @@
 
 """
 
-A Shodan scan for IP range
+A Shodan/ZoomEye scan for IP range
 Needs to install shodan through pip: python3 -m pip3 install shodan
+Needs to install zoomeye through pip: python3 -m pip3 install zoomeye-sdk
 
 """
 
 import shodan
+import zoomeye
 import sys
 import time
 import ipaddress as ipadd
 
+
 SHODAN_API_KEY='' # Shodan api key here
 ZOOMEYE_API_KEY='' # Zoomeye api key here
-
 shodan_api=shodan.Shodan(SHODAN_API_KEY)
+zoomeye_api=zoomeye.ZoomEye(api_key=ZOOMEYE_API_KEY)
+
 
 def check():
     if len(sys.argv)==1:
@@ -27,11 +31,12 @@ def scan():
     ipRange=sys.argv[1]
     try:
         for eachIP in ipadd.IPv4Network(ipRange):
+            print("Scanning: "+str(eachIP))
+
+            # Pulling Shodan API data
             try:
-                print("Scanning: "+str(eachIP))
-                
-                # Pulling API data
                 host=shodan_api.host(str(eachIP))
+                print("*"*30+" SHODAN RESULT "+"*"*30)
                 print("*"*60)
 
                 # More fields can  be add here if more information is desired
@@ -46,10 +51,24 @@ def scan():
                     except:
                         pass
                 time.sleep(1)
-
             except shodan.APIError:
                 time.sleep(1)
                 pass
+
+            # Pulling ZoomEye API data 
+            try:
+                data=zoomeye_api.dork_search(eachIP)
+                print("*"*30+" ZOOMEYE RESULT "+"*"*30)
+                print("*"*60)
+
+                for item in data:
+                # TO DO:
+
+
+            except:
+                time.sleep(1)
+                pass
+
     except ipadd.AddressValueError as e:
         print("Invalid IP: {}".format(e))
         sys.exit()
@@ -61,13 +80,11 @@ if __name__=='__main__':
     scan()
 
 
-
 '''
 To be implemented:
 ipinfo.io? ip info
 greynoise? ip info
 SecurityTrails? DNS reverse lookup
 ZoomEye? host info
-
-
 '''
+
