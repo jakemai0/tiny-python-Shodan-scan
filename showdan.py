@@ -12,8 +12,9 @@ import sys
 import time
 import ipaddress as ipadd
 
-API_KEY='KguYx2uMOscmpNdoyaptzWFrTWxFxzg6' # Jake's key, can use ya own if ya want
-api=shodan.Shodan(API_KEY)
+SHODAN_API_KEY='' 
+ZOOMEYE_API_KEY=''
+shodan_api=shodan.Shodan(SHODAN_API_KEY)
 
 def check():
     if len(sys.argv)==1:
@@ -29,7 +30,7 @@ def scan():
                 print("Scanning: "+str(eachIP))
                 
                 # Pulling API data
-                host=api.host(str(eachIP))
+                host=shodan_api.host(str(eachIP))
                 print("*"*60)
 
                 # More fields can  be add here if more information is desired
