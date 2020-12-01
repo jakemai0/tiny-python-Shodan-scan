@@ -12,8 +12,9 @@ import sys
 import time
 import ipaddress as ipadd
 
-SHODAN_API_KEY='' 
-ZOOMEYE_API_KEY=''
+SHODAN_API_KEY='' # Shodan api key here
+ZOOMEYE_API_KEY='' # Zoomeye api key here
+
 shodan_api=shodan.Shodan(SHODAN_API_KEY)
 
 def check():
